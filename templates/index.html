@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breast Cancer Prediction</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        crossorigin="anonymous">
+
+  <style>
+    body {
+      background: linear-gradient(120deg, #fdfbfb, #ebedee);
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #f8bbd0;
+    }
+
+    .hero-image {
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      margin-bottom: 25px;
+    }
+
+    .prediction-form {
+      border-radius: 15px;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .result-card {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    footer {
+      background-color: #f8bbd0;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand font-weight-bold" href="#">Breast Cancer Predictor</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+    data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class='nav-item'><a class='nav-link' href="/">Home</a></li>
+      <li class='nav-item'><a class='nav-link' href="#predict">Predict</a></li>
+      <li class='nav-item'><a class='nav-link' href="#about">About</a></li>
+      <li class='nav-item'><a class='nav-link' href="#" data-toggle="modal" data-target="#notesModal">Notes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Modal for Notes -->
+<div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="notesModalLabel">About Breast Cancer</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6><strong>Breast cancer</strong></h6>
+        <p>
+          Breast cancer is a type of cancer that develops in breast cells. It is the most commonly occurring cancer in women and the second most common cancer overall. It can develop in both men and women, but it is far more common in women.
+        </p>
+        <p>
+          Symptoms may include a lump or mass in the breast, change in breast size or shape, dimpling of the skin, nipple discharge, and redness or flaky skin in the nipple area. Early diagnosis is crucial in improving survival rates.
+        </p>
+        <h6><strong>Types:</strong></h6>
+        <ul>
+          <li>Ductal carcinoma in situ (DCIS)</li>
+          <li>Invasive ductal carcinoma (IDC)</li>
+          <li>Invasive lobular carcinoma (ILC)</li>
+        </ul>
+        <h6><strong>Treatment:</strong></h6>
+        <p>
+          Treatment options vary based on the stage and type, including surgery, radiation therapy, chemotherapy, hormone therapy, and targeted therapy.
+        </p>
+        <p>Learn more on <a href="https://en.wikipedia.org/wiki/Breast_cancer" target="_blank">Wikipedia</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container text-center mt-5">
+
+  <h1 class="display-4 font-weight-bold text-dark">Breast Cancer Prediction</h1>
+  <p class="lead">A machine learning app to assist with early detection and diagnosis.</p>
+
+  <img src="{{ url_for('static', filename='images.jpeg') }}" class="img-fluid hero-image" alt="Breast Cancer" style="max-width: 600px;">
+
+  <!-- Prediction Form -->
+  <div id="predict" class="prediction-form mt-4">
+    <h3 class="mb-3 font-weight-bold">Enter Feature Values</h3>
+    <form action="/predict" method="post">
+      <input type="text" name="feature" id="feature" class="form-control"
+             placeholder="e.g. 17.99,10.38,122.8,1001..." required>
+      <button type="submit" class="btn btn-primary mt-3">Predict</button>
+    </form>
+  </div>
+
+  <!-- Prediction Output -->
+  {% if message %}
+    <div class="result-card mt-5 p-4 bg-white shadow rounded">
+      {% if message == "cancrous" %}
+        <h3 class="text-danger font-weight-bold">⚠ Cancer Detected</h3>
+        <p>The model predicts this is likely malignant. We highly recommend consulting a medical professional at the earliest.</p>
+        <img src="{{ url_for('static', filename='BreastCancerAI.png') }}" class="img-fluid" style="max-width: 300px;">
+      {% else %}
+        <h3 class="text-success font-weight-bold">✔ No Cancer Detected</h3>
+        <p>The prediction suggests benign cells. It is advisable to maintain regular screenings and follow doctor advice.</p>
+        <img src="{{ url_for('static', filename='no cancer.png') }}" class="img-fluid" style="max-width: 300px;">
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- About Section -->
+  <section id="about" class="mt-5">
+    <h2 class="font-weight-bold">About This Application</h2>
+    <p>This app leverages a Logistic Regression model trained using the Wisconsin Breast Cancer dataset to predict whether a tumor is benign or malignant based on medical features.</p>
+  </section>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-3 mt-4">
+  <small>© 2024 Breast Cancer Prediction | For educational use</small>
+</footer>
+
+<!-- JS Bundle -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
